@@ -1,6 +1,7 @@
 package ofirmgr.kotlin.xml.dom
 
 import org.w3c.dom.Document
+import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 import java.io.*
@@ -21,11 +22,11 @@ fun main() {
 
     (0 until hostEntryList.length).forEach { i ->
         val hostEntryNode: Node = hostEntryList.item(i)
-        val name = hostEntryNode.childNodes.item(1).textContent
+        val name = (hostEntryNode as Element).getElementsByTagName("HostName").item(0).textContent
         println("name: $name")
         if (name == "Certificate Check")
             return@forEach
-        val host = hostEntryNode.childNodes.item(3)?.textContent
+        val host = (hostEntryNode as Element).getElementsByTagName("HostAddress").item(0)?.textContent
         println("host: $host")
 
         if (host != null) {
