@@ -1,4 +1,4 @@
-package com.turreta.kotlin.xml.dom
+package ofirmgr.kotlin.xml.dom
 
 import org.w3c.dom.Document
 import org.w3c.dom.Node
