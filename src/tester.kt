@@ -26,7 +26,7 @@ fun main() {
         println("name: $name")
         if (name == "Certificate Check")
             return@forEach
-        val host = (hostEntryNode as Element).getElementsByTagName("HostAddress").item(0)?.textContent
+        val host = hostEntryNode.getElementsByTagName("HostAddress").item(0)?.textContent
         println("host: $host")
 
         if (host != null) {
@@ -35,7 +35,7 @@ fun main() {
             println("pingTime: $pingTime")
             if(pingTime?.toDoubleOrNull() == null)
                 return@forEach
-            if (pingTime?.toDouble() < bestTime) {
+            if (pingTime.toDouble() < bestTime) {
                 bestTime = pingTime.toDouble()
                 bestName = name
             }
