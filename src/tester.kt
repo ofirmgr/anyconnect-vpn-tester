@@ -33,7 +33,9 @@ fun main() {
             val pingRes = ping(host)
             val pingTime = pingRes?.substringAfter("time=")?.substringBefore(" ms")
             println("pingTime: $pingTime")
-            if (pingTime!!.toDouble() < bestTime) {
+            if(pingTime?.toDoubleOrNull() == null)
+                return@forEach
+            if (pingTime?.toDouble() < bestTime) {
                 bestTime = pingTime.toDouble()
                 bestName = name
             }
