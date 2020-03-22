@@ -4,22 +4,55 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
-import java.io.*
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
 import javax.xml.parsers.DocumentBuilderFactory
 
-fun main() {
-    val xlmFile = File("//opt//cisco//anyconnect//profile//attcorpmac.xml")
-    //TODO: iterate over other xml files in this folder
-    //TODO: add windows folder for xml files
-    val xmlDoc: Document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xlmFile)
 
+var bestTime = Double.MAX_VALUE
+var bestName = ""
+val isWindows = System.getProperty("os.name").toLowerCase().contains("win")
+fun main() {
+    var profileFolder:String = ""
+    if(isWindows) {
+        //TODO: add windows folder for xml files
+    }
+    else {
+        profileFolder = "/opt/cisco/anyconnect/profile"
+    }
+
+    Files.walk(Paths.get(profileFolder)).use { paths ->
+        paths
+            .filter {
+                Files.isRegularFile(it)
+            }
+            .filter { it.fileName?.toFile()?.extension == "xml" }
+            .forEach {
+                println("FILE: $it")
+                val xlmFile = it.toFile()
+                findFastestVPN(xlmFile)
+            }
+    }
+
+
+
+    println("--------------------------")
+    println("bestName: $bestName")
+    println("bestTime: $bestTime")
+}
+
+private fun findFastestVPN(xlmFile: File) {
+    val xmlDoc: Document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xlmFile)
     xmlDoc.documentElement.normalize()
 
     val hostEntryList: NodeList = xmlDoc.getElementsByTagName("HostEntry")
-    var bestTime = Double.MAX_VALUE
-    var bestName = ""
-
     (0 until hostEntryList.length).forEach { i ->
         val hostEntryNode: Node = hostEntryList.item(i)
         val name = (hostEntryNode as Element).getElementsByTagName("HostName").item(0).textContent
@@ -33,7 +66,7 @@ fun main() {
             val pingRes = ping(host)
             val pingTime = pingRes?.substringAfter("time=")?.substringBefore(" ms")
             println("pingTime: $pingTime")
-            if(pingTime?.toDoubleOrNull() == null)
+            if (pingTime?.toDoubleOrNull() == null)
                 return@forEach
             if (pingTime.toDouble() < bestTime) {
                 bestTime = pingTime.toDouble()
@@ -41,15 +74,11 @@ fun main() {
             }
         }
     }
-
-    println("--------------------------")
-    println("bestName: $bestName")
-    println("bestTime: $bestTime")
 }
 
 
 fun ping(host: String): String? {
-    val isWindows = System.getProperty("os.name").toLowerCase().contains("win")
+
     val processBuilder = ProcessBuilder("ping", if (isWindows) "-n" else "-c", "1", host)
     val proc = processBuilder.start()
     proc.waitFor(1000, TimeUnit.MILLISECONDS)
