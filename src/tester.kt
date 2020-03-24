@@ -62,7 +62,7 @@ private fun findFastestVPN(xlmFile: File) {
 
         if (host != null) {
             val pingRes = ping(host)
-            val pingTime = pingRes?.substringAfter("time=")?.substringBefore(" ms")
+            val pingTime = pingRes?.substringAfter("time=")?.substringBefore("ms")
             println("pingTime: $pingTime")
             if (pingTime?.toDoubleOrNull() == null)
                 return@forEach
