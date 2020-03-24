@@ -20,7 +20,7 @@ val isWindows = System.getProperty("os.name").toLowerCase().contains("win")
 fun main() {
     var profileFolder:String = ""
     if(isWindows) {
-        //TODO: add windows folder for xml files
+        profileFolder = "C:\\ProgramData\\Cisco\\Cisco AnyConnect Secure Mobility Client\\Profile"
     }
     else {
         profileFolder = "/opt/cisco/anyconnect/profile"
