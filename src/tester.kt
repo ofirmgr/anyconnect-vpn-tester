@@ -18,26 +18,24 @@ var bestTime = Double.MAX_VALUE
 var bestName = ""
 val isWindows = System.getProperty("os.name").toLowerCase().contains("win")
 fun main() {
-    var profileFolder:String = ""
-    if(isWindows) {
-        profileFolder = "C:\\ProgramData\\Cisco\\Cisco AnyConnect Secure Mobility Client\\Profile"
-    }
-    else {
-        profileFolder = "/opt/cisco/anyconnect/profile"
+    val profileFolder: String = if (isWindows) {
+        "C:\\ProgramData\\Cisco\\Cisco AnyConnect Secure Mobility Client\\Profile"
+    } else {
+        "/opt/cisco/anyconnect/profile"
     }
 
-    Files.walk(Paths.get(profileFolder)).use { paths ->
-        paths
-            .filter {
-                Files.isRegularFile(it)
-            }
-            .filter { it.fileName?.toFile()?.extension == "xml" }
-            .forEach {
-                println("FILE: $it")
-                val xlmFile = it.toFile()
-                findFastestVPN(xlmFile)
-            }
-    }
+
+    val walk = Files.walk(Paths.get(profileFolder))
+    walk.filter {
+        Files.isRegularFile(it)
+    }.filter { it.fileName?.toFile()?.extension == "xml" }
+        .forEach {
+            println("FILE: $it")
+            val xlmFile = it.toFile()
+            findFastestVPN(xlmFile)
+        }
+
+
 
 
 
