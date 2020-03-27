@@ -11,6 +11,8 @@ You need to be disconnected from VPN connection before you run the test.
 2 ways:
 1. From intelliJ IDE , open the src/tester.kt file and look for the green arrow near the main function.
 2. From commandline:  
-To compile: `kotlinc src/tester.kt -include-runtime -d tester.jar`
-To run: `java -jar tester.jar`
+
+  To compile: `kotlinc src/tester.kt -include-runtime -d tester.jar`
+
+  To run: `java -jar tester.jar`
 
