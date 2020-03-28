@@ -24,7 +24,7 @@ fun main() {
         "/opt/cisco/anyconnect/profile"
     }
 
-
+    // pass every xml file in the profile folder
     val walk = Files.walk(Paths.get(profileFolder))
     walk.filter {
         Files.isRegularFile(it)
@@ -34,10 +34,6 @@ fun main() {
             val xlmFile = it.toFile()
             findFastestVPN(xlmFile)
         }
-
-
-
-
 
     println("--------------------------")
     println("bestName: $bestName")
