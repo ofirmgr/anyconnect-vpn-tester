@@ -10,6 +10,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -17,6 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 var bestTime = Double.MAX_VALUE
 var bestName = ""
 val isWindows = System.getProperty("os.name").toLowerCase().contains("win")
+var vpnMap: MutableMap<String, Double> = mutableMapOf()
 fun main() {
     val profileFolder: String = if (isWindows) {
         "C:\\ProgramData\\Cisco\\Cisco AnyConnect Secure Mobility Client\\Profile"
@@ -38,6 +40,8 @@ fun main() {
     println("--------------------------")
     println("bestName: $bestName")
     println("bestTime: $bestTime")
+
+    println("vpnMap.toString(): ${vpnMap.toList().sortedBy { it.second }.joinToString()}")
 }
 
 private fun findFastestVPN(xlmFile: File) {
@@ -64,6 +68,7 @@ private fun findFastestVPN(xlmFile: File) {
                 bestTime = pingTime.toDouble()
                 bestName = name
             }
+            vpnMap.put(name, pingTime.toDouble())
         }
     }
 }
