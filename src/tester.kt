@@ -41,7 +41,7 @@ fun main() {
     println("bestName: $bestName")
     println("bestTime: $bestTime")
 
-    println("vpnMap.toString(): ${vpnMap.toList().sortedBy { it.second }.joinToString()}")
+    println("vpnMap.toString():\n${vpnMap.toList().sortedBy { it.second }.joinToString("\n")}")
 }
 
 private fun findFastestVPN(xlmFile: File) {
